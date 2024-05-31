@@ -1,127 +1,58 @@
 ﻿using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Support.UI;
 
-namespace SeleniumTests
+namespace CanDriveTests
 {
     [TestClass]
-    public class SuccessfulLogin
+    public class UnitTest1
     {
-        private static IWebDriver driver;
-        private StringBuilder verificationErrors;
-        private static string baseURL;
-        private bool acceptNextAlert = true;
-
-        [ClassInitialize]
-        public static void InitializeClass(TestContext testContext)
+        public bool CanDrive(int age)
         {
-            driver = new FirefoxDriver();
-            baseURL = "https://www.google.com/";
-        }
 
-        [ClassCleanup]
-        public static void CleanupClass()
-        {
-            try
-            {
-                //driver.Quit();// quit does not close the window
-                driver.Close();
-                driver.Dispose();
-            }
-            catch (Exception)
-            {
-                // Ignore errors if unable to close the browser
-            }
-        }
+            const int drivingAge = 16; return age >= drivingAge;
 
-        [TestInitialize]
-        public void InitializeTest()
-        {
-            verificationErrors = new StringBuilder();
-        }
-
-        [TestCleanup]
-        public void CleanupTest()
-        {
-            Assert.AreEqual("", verificationErrors.ToString());
         }
 
         [TestMethod]
-        public void TheSuccessfulLoginTest()
+        public void TestMethod1()
         {
-            driver.Navigate().GoToUrl("https://www.letsusedata.com/index.html");
-            driver.FindElement(By.Id("txtUser")).Click();
-            driver.FindElement(By.Id("txtUser")).Clear();
-            driver.FindElement(By.Id("txtUser")).SendKeys("test1");
-            driver.FindElement(By.Id("txtPassword")).Click();
-            driver.FindElement(By.Id("txtPassword")).Clear();
-            driver.FindElement(By.Id("txtPassword")).SendKeys("test12456");
-            driver.FindElement(By.Id("javascriptLogin")).Click();
+            Assert.IsFalse(CanDrive(int.MinValue));
         }
 
         [TestMethod]
-        public void TheUnsuccessfulLoginTest()
+        public void TestMethod2()
         {
-            driver.Navigate().GoToUrl("https://www.letsusedata.com/index.html");
-            driver.FindElement(By.Id("txtUser")).Click();
-            driver.FindElement(By.Id("txtUser")).Clear();
-            driver.FindElement(By.Id("txtUser")).SendKeys("test1");
-            driver.FindElement(By.Id("txtPassword")).Click();
-            driver.FindElement(By.Id("txtPassword")).Clear();
-            driver.FindElement(By.Id("txtPassword")).SendKeys("test1234");
-            driver.FindElement(By.Id("javascriptLogin")).Click();
-        }
-        private bool IsElementPresent(By by)
-        {
-            try
-            {
-                driver.FindElement(by);
-                return true;
-            }
-            catch (NoSuchElementException)
-            {
-                return false;
-            }
+            Assert.IsFalse(CanDrive(int.MinValue + 1));
         }
 
-        private bool IsAlertPresent()
+        [TestMethod]
+        public void TestMethod3()
         {
-            try
-            {
-                driver.SwitchTo().Alert();
-                return true;
-            }
-            catch (NoAlertPresentException)
-            {
-                return false;
-            }
+            Assert.IsFalse(CanDrive(15));
         }
 
-        private string CloseAlertAndGetItsText()
+        [TestMethod]
+        public void TestMethod4()
         {
-            try
-            {
-                IAlert alert = driver.SwitchTo().Alert();
-                string alertText = alert.Text;
-                if (acceptNextAlert)
-                {
-                    alert.Accept();
-                }
-                else
-                {
-                    alert.Dismiss();
-                }
-                return alertText;
-            }
-            finally
-            {
-                acceptNextAlert = true;
-            }
+            Assert.IsTrue(CanDrive(16));
+        }
+
+        [TestMethod]
+        public void TestMethod5()
+        {
+            Assert.IsTrue(CanDrive(17));
+        }
+
+        [TestMethod]
+        public void TestMethod6()
+        {
+            Assert.IsTrue(CanDrive(int.MaxValue - 1));
+        }
+
+        [TestMethod]
+        public void TestMethod7()
+        {
+            Assert.IsTrue(CanDrive(int.MaxValue));
         }
     }
 }
